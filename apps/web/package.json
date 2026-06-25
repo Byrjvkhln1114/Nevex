@@ -12,6 +12,7 @@
     "@nevex/graphql-gateway": "*",
     "@nevex/mongodb": "*",
     "@nevex/module-treasury": "*",
+    "@nevex/module-vitality": "*",
     "@graphql-tools/schema": "^10.0.33",
     "graphql": "^16.14.2",
     "graphql-yoga": "^5.21.2",

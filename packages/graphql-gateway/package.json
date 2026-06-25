@@ -10,6 +10,7 @@
   "dependencies": {
     "@graphql-tools/schema": "^10.0.33",
     "@nevex/module-treasury": "*",
+    "@nevex/module-vitality": "*",
     "graphql": "^17.0.1"
   },
   "devDependencies": {

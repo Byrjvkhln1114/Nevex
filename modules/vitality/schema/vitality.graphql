@@ -1,0 +1,34 @@
+type VitalityHabit {
+  id: ID!
+  name: String!
+  frequency: HabitFrequency!
+  streak: Int!
+  longestStreak: Int!
+  lastCompletedAt: String
+  createdAt: String!
+  updatedAt: String!
+}
+
+type VitalityWellbeingCheckIn {
+  id: ID!
+  moodScore: Int!
+  energyScore: Int!
+  sleepHours: Float!
+  note: String
+  occurredAt: String!
+  createdAt: String!
+}
+
+enum HabitFrequency {
+  daily
+  weekly
+}
+
+type VitalityQuery {
+  habits: [VitalityHabit!]!
+  recentCheckIns: [VitalityWellbeingCheckIn!]!
+}
+
+type VitalityMutation {
+  completeHabit(habitId: ID!, note: String): Boolean!
+}

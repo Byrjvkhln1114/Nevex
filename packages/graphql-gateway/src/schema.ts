@@ -5,10 +5,12 @@ import { join } from "path";
 const rootTypeDefs = `
   type Query {
     treasury: TreasuryQuery
+    vitality: VitalityQuery
   }
 
   type Mutation {
     treasury: TreasuryMutation
+    vitality: VitalityMutation
   }
 `;
 
@@ -17,10 +19,10 @@ function loadSchema(modulePath: string, fileName: string): string {
 }
 
 export function buildTypeDefs(): string {
-  const treasurySchema = loadSchema(
-    join(process.cwd(), "../../modules/treasury/schema"),
-    "treasury.graphql"
-  );
+  const modulesDir = join(process.cwd(), "../../modules");
 
-  return [rootTypeDefs, treasurySchema].join("\n");
+  const treasurySchema = loadSchema(join(modulesDir, "treasury/schema"), "treasury.graphql");
+  const vitalitySchema = loadSchema(join(modulesDir, "vitality/schema"), "vitality.graphql");
+
+  return [rootTypeDefs, treasurySchema, vitalitySchema].join("\n");
 }

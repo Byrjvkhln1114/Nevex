@@ -2,6 +2,7 @@ import { createYoga } from "graphql-yoga";
 import { buildSchema } from "@nevex/graphql-gateway";
 import { connectDb } from "@nevex/mongodb";
 import { bootstrapTreasury } from "@nevex/module-treasury";
+import { bootstrapVitality } from "@nevex/module-vitality";
 
 let bootstrapped = false;
 
@@ -9,6 +10,7 @@ async function ensureBootstrapped() {
   if (bootstrapped) return;
   await connectDb();
   bootstrapTreasury();
+  bootstrapVitality();
   bootstrapped = true;
 }
 
