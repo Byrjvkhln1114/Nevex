@@ -12,7 +12,8 @@
     "apps/*",
     "packages/*",
     "modules/*",
-    "platform/*"
+    "platform/*",
+    "infra/*"
   ],
   "private": true,
   "packageManager": "npm@10.9.0",
