@@ -1,1 +1,2 @@
-// @nevex/event-bus
+export * from "./types";
+export * from "./emitter";
