@@ -1,11 +1,12 @@
 import { readFileSync } from "fs";
 import { join } from "path";
+import { overviewTypeDefs } from "./overview";
 
-// Root schema — wires domain namespaces into top-level Query/Mutation
 const rootTypeDefs = `
   type Query {
     treasury: TreasuryQuery
     vitality: VitalityQuery
+    overview: OverviewQuery
   }
 
   type Mutation {
@@ -24,5 +25,5 @@ export function buildTypeDefs(): string {
   const treasurySchema = loadSchema(join(modulesDir, "treasury/schema"), "treasury.graphql");
   const vitalitySchema = loadSchema(join(modulesDir, "vitality/schema"), "vitality.graphql");
 
-  return [rootTypeDefs, treasurySchema, vitalitySchema].join("\n");
+  return [rootTypeDefs, overviewTypeDefs, treasurySchema, vitalitySchema].join("\n");
 }

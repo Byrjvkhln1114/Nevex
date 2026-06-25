@@ -11,6 +11,7 @@
     "@graphql-tools/schema": "^10.0.33",
     "@nevex/module-treasury": "*",
     "@nevex/module-vitality": "*",
+    "@nevex/notification-service": "*",
     "graphql": "^17.0.1"
   },
   "devDependencies": {

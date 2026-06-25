@@ -1,1 +1,1 @@
-// @nevex/notification-service
+export * from "./outcome.store";
