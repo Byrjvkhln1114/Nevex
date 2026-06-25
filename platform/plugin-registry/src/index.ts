@@ -1,0 +1,1 @@
+// @nevex/plugin-registry
