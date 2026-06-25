@@ -1,0 +1,49 @@
+type TreasuryAccount {
+  id: ID!
+  name: String!
+  type: AccountType!
+  balance: Money!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type TreasuryDebt {
+  id: ID!
+  accountId: String!
+  label: String!
+  principal: Money!
+  balance: Money!
+  interestRate: Float!
+  minimumPayment: Money!
+  payoffTarget: String
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Money {
+  amount: Int!
+  currency: Currency!
+}
+
+enum AccountType {
+  bank
+  credit_card
+  loan
+  investment
+  cash
+}
+
+enum Currency {
+  MNT
+  USD
+  EUR
+}
+
+type TreasuryQuery {
+  accounts: [TreasuryAccount!]!
+  debts: [TreasuryDebt!]!
+}
+
+type TreasuryMutation {
+  makeDebtPayment(debtId: ID!, amount: Int!, currency: Currency!): Boolean!
+}

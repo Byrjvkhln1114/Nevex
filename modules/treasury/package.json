@@ -8,10 +8,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@nevex/shared-kernel": "*",
-    "@nevex/event-bus": "*",
     "@nevex/dependency-engine": "*",
-    "@nevex/mongodb": "*"
+    "@nevex/event-bus": "*",
+    "@nevex/mongodb": "*",
+    "@nevex/shared-kernel": "*",
+    "graphql": "^17.0.1"
   },
   "devDependencies": {
     "typescript": "^5"
