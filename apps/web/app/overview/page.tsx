@@ -1,20 +1,23 @@
 type ActionType = "unlock" | "suggest" | "flag" | "notify";
 
-interface OutcomeAction {
-  type: ActionType;
-  targetDomain: string;
-  key: string;
-  message?: string;
-}
-
 interface DependencyOutcome {
   ruleId: string;
   triggeredAt: string;
-  status: string;
-  action: OutcomeAction;
+  action: { type: ActionType; targetDomain: string; key: string; message?: string };
 }
 
-async function getActiveOutcomes(): Promise<DependencyOutcome[]> {
+interface DomainStat  { label: string; value: string }
+interface DomainSummary {
+  slug: string;
+  label: string;
+  stats: DomainStat[];
+  lastActivity?: string;
+}
+
+async function fetchOverview(): Promise<{
+  outcomes: DependencyOutcome[];
+  domains: DomainSummary[];
+}> {
   const res = await fetch("http://localhost:3000/api/graphql", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -22,10 +25,12 @@ async function getActiveOutcomes(): Promise<DependencyOutcome[]> {
       query: `{
         overview {
           activeOutcomes {
-            ruleId
-            triggeredAt
-            status
+            ruleId triggeredAt
             action { type targetDomain key message }
+          }
+          domainSummaries {
+            slug label lastActivity
+            stats { label value }
           }
         }
       }`,
@@ -33,46 +38,83 @@ async function getActiveOutcomes(): Promise<DependencyOutcome[]> {
     cache: "no-store",
   });
   const json = await res.json();
-  return json.data?.overview?.activeOutcomes ?? [];
+  return {
+    outcomes: json.data?.overview?.activeOutcomes ?? [],
+    domains:  json.data?.overview?.domainSummaries ?? [],
+  };
 }
 
-const ACTION_STYLES: Record<ActionType, { badge: string; border: string; icon: string }> = {
+const ACTION_STYLE: Record<ActionType, { badge: string; border: string; icon: string }> = {
   unlock: { badge: "bg-emerald-100 text-emerald-800", border: "border-emerald-200", icon: "🔓" },
-  suggest: { badge: "bg-blue-100 text-blue-800",    border: "border-blue-200",    icon: "💡" },
-  flag:    { badge: "bg-amber-100 text-amber-800",   border: "border-amber-200",   icon: "🚩" },
-  notify:  { badge: "bg-slate-100 text-slate-800",   border: "border-slate-200",   icon: "🔔" },
+  suggest: { badge: "bg-blue-100 text-blue-800",     border: "border-blue-200",     icon: "💡" },
+  flag:    { badge: "bg-amber-100 text-amber-800",    border: "border-amber-200",    icon: "🚩" },
+  notify:  { badge: "bg-slate-100 text-slate-800",    border: "border-slate-200",    icon: "🔔" },
+};
+
+const DOMAIN_ICON: Record<string, string> = {
+  treasury:    "💰",
+  vitality:    "🏃",
+  presence:    "👔",
+  environment: "🖥️",
+  trajectory:  "🎯",
 };
 
 export default async function OverviewPage() {
-  const outcomes = await getActiveOutcomes();
+  const { outcomes, domains } = await fetchOverview();
 
   return (
     <main className="min-h-screen bg-slate-950 text-slate-100 p-8">
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-4xl mx-auto space-y-10">
 
-        <div className="mb-10">
+        {/* Header */}
+        <div>
           <h1 className="text-3xl font-bold tracking-tight">Nevex</h1>
           <p className="text-slate-400 mt-1">Your life operating system</p>
         </div>
 
+        {/* Domain summaries */}
         <section>
-          <h2 className="text-sm font-semibold uppercase tracking-widest text-slate-500 mb-4">
-            Active Signals
-          </h2>
+          <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-4">Domains</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {domains.map((d) => (
+              <div key={d.slug} className="rounded-xl border border-slate-800 bg-slate-900 p-5 space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">{DOMAIN_ICON[d.slug] ?? "📦"}</span>
+                  <span className="font-semibold text-slate-100">{d.label}</span>
+                </div>
+                <div className="space-y-1">
+                  {d.stats.map((s) => (
+                    <div key={s.label} className="flex justify-between text-sm">
+                      <span className="text-slate-500">{s.label}</span>
+                      <span className="text-slate-200 font-medium">{s.value}</span>
+                    </div>
+                  ))}
+                </div>
+                {d.lastActivity && (
+                  <p className="text-xs text-slate-600">
+                    Last activity {new Date(d.lastActivity).toLocaleDateString()}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
 
+        {/* Active signals */}
+        <section>
+          <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-4">
+            Active Signals ({outcomes.length})
+          </h2>
           {outcomes.length === 0 ? (
             <div className="rounded-xl border border-slate-800 bg-slate-900 p-8 text-center text-slate-500">
-              No signals yet. Complete habits or make debt payments to see cross-domain insights appear here.
+              No signals yet. Complete habits, make debt payments, or add certifications to see cross-domain insights appear here.
             </div>
           ) : (
             <ul className="space-y-3">
               {outcomes.map((o) => {
-                const style = ACTION_STYLES[o.action.type] ?? ACTION_STYLES.notify;
+                const style = ACTION_STYLE[o.action.type] ?? ACTION_STYLE.notify;
                 return (
-                  <li
-                    key={o.ruleId}
-                    className={`rounded-xl border ${style.border} bg-slate-900 p-5 flex gap-4 items-start`}
-                  >
+                  <li key={o.ruleId} className={`rounded-xl border ${style.border} bg-slate-900 p-5 flex gap-4 items-start`}>
                     <span className="text-2xl">{style.icon}</span>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
@@ -94,20 +136,6 @@ export default async function OverviewPage() {
               })}
             </ul>
           )}
-        </section>
-
-        <section className="mt-10 grid grid-cols-2 gap-4">
-          {(["treasury", "vitality", "presence", "trajectory"] as const).map((domain) => (
-            <div
-              key={domain}
-              className="rounded-xl border border-slate-800 bg-slate-900 p-5"
-            >
-              <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-1">
-                {domain}
-              </p>
-              <p className="text-slate-600 text-sm">Coming soon</p>
-            </div>
-          ))}
         </section>
 
       </div>
