@@ -63,14 +63,8 @@ export default async function OverviewPage() {
   const { outcomes, domains } = await fetchOverview();
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100 p-8">
+    <main className="p-8">
       <div className="max-w-4xl mx-auto space-y-10">
-
-        {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Nevex</h1>
-          <p className="text-slate-400 mt-1">Your life operating system</p>
-        </div>
 
         {/* Domain summaries */}
         <section>

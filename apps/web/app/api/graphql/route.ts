@@ -7,12 +7,14 @@ import { bootstrapPresence } from "@nevex/module-presence";
 import { bootstrapEnvironment } from "@nevex/module-environment";
 import { bootstrapTrajectory } from "@nevex/module-trajectory";
 import { startOutcomeStore } from "@nevex/notification-service";
+import { startEventStore } from "@nevex/event-store";
 
 let bootstrapped = false;
 
 async function ensureBootstrapped() {
   if (bootstrapped) return;
   await connectDb();
+  startEventStore();
   startOutcomeStore();
   bootstrapTreasury();
   bootstrapVitality();

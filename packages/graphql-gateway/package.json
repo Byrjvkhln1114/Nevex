@@ -14,6 +14,7 @@
     "@nevex/module-presence": "*",
     "@nevex/module-environment": "*",
     "@nevex/module-trajectory": "*",
+    "@nevex/analytics": "*",
     "@nevex/notification-service": "*",
     "graphql": "^17.0.1"
   },

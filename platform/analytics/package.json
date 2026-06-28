@@ -1,0 +1,17 @@
+{
+  "name": "@nevex/analytics",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@nevex/mongodb": "*",
+    "@nevex/shared-kernel": "*"
+  },
+  "devDependencies": {
+    "typescript": "^5"
+  }
+}

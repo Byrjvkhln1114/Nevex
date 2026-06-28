@@ -16,6 +16,7 @@
     "@nevex/module-presence": "*",
     "@nevex/module-environment": "*",
     "@nevex/module-trajectory": "*",
+    "@nevex/event-store": "*",
     "@nevex/notification-service": "*",
     "@graphql-tools/schema": "^10.0.33",
     "graphql": "^16.14.2",

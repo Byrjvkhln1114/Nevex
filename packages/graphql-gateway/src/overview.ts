@@ -1,4 +1,5 @@
 import { findActiveOutcomes } from "@nevex/notification-service";
+import { getAllDomainAnalytics, getDebtReductionTrend } from "@nevex/analytics";
 import { findAllAccounts, findAllDebts } from "@nevex/module-treasury/src/repository";
 import { findAllHabits, findRecentCheckIns } from "@nevex/module-vitality/src/repository";
 import { findAllWardrobeItems } from "@nevex/module-presence/src/repository";
@@ -37,9 +38,34 @@ export const overviewTypeDefs = `
     value: String!
   }
 
+  type TrendPoint {
+    date:  String!
+    value: Int!
+  }
+
+  type EventTypeCount {
+    type:  String!
+    count: Int!
+  }
+
+  type DomainAnalytics {
+    domain:         String!
+    eventCounts:    [TrendPoint!]!
+    topEventTypes:  [EventTypeCount!]!
+  }
+
+  type DebtTrendPoint {
+    date:       String!
+    debtId:     String!
+    newBalance: Int!
+    currency:   String!
+  }
+
   type OverviewQuery {
-    activeOutcomes:  [DependencyOutcome!]!
-    domainSummaries: [DomainSummary!]!
+    activeOutcomes:    [DependencyOutcome!]!
+    domainSummaries:   [DomainSummary!]!
+    analytics:         [DomainAnalytics!]!
+    debtTrend(debtId: ID): [DebtTrendPoint!]!
   }
 `;
 
@@ -121,5 +147,7 @@ export const overviewResolvers = {
         environmentSummary(),
         trajectorySummary(),
       ]),
+    analytics: () => getAllDomainAnalytics(),
+    debtTrend: (_: unknown, args: { debtId?: string }) => getDebtReductionTrend(args.debtId),
   },
 };

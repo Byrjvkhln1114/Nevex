@@ -4,9 +4,6 @@ class RuleRegistry {
   private rules = new Map<string, DependencyRule>();
 
   register(rule: DependencyRule): void {
-    if (this.rules.has(rule.id)) {
-      throw new Error(`Rule "${rule.id}" is already registered`);
-    }
     this.rules.set(rule.id, rule);
   }
 
