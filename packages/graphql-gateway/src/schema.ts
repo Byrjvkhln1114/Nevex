@@ -4,14 +4,20 @@ import { overviewTypeDefs } from "./overview";
 
 const rootTypeDefs = `
   type Query {
-    treasury: TreasuryQuery
-    vitality: VitalityQuery
-    overview: OverviewQuery
+    treasury:    TreasuryQuery
+    vitality:    VitalityQuery
+    presence:    PresenceQuery
+    environment: EnvironmentQuery
+    trajectory:  TrajectoryQuery
+    overview:    OverviewQuery
   }
 
   type Mutation {
-    treasury: TreasuryMutation
-    vitality: VitalityMutation
+    treasury:    TreasuryMutation
+    vitality:    VitalityMutation
+    presence:    PresenceMutation
+    environment: EnvironmentMutation
+    trajectory:  TrajectoryMutation
   }
 `;
 
@@ -21,9 +27,16 @@ function loadSchema(modulePath: string, fileName: string): string {
 
 export function buildTypeDefs(): string {
   const modulesDir = join(process.cwd(), "../../modules");
+  const load = (domain: string) =>
+    loadSchema(join(modulesDir, `${domain}/schema`), `${domain}.graphql`);
 
-  const treasurySchema = loadSchema(join(modulesDir, "treasury/schema"), "treasury.graphql");
-  const vitalitySchema = loadSchema(join(modulesDir, "vitality/schema"), "vitality.graphql");
-
-  return [rootTypeDefs, overviewTypeDefs, treasurySchema, vitalitySchema].join("\n");
+  return [
+    rootTypeDefs,
+    overviewTypeDefs,
+    load("treasury"),
+    load("vitality"),
+    load("presence"),
+    load("environment"),
+    load("trajectory"),
+  ].join("\n");
 }

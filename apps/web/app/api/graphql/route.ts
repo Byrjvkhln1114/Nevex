@@ -3,6 +3,9 @@ import { buildSchema } from "@nevex/graphql-gateway";
 import { connectDb } from "@nevex/mongodb";
 import { bootstrapTreasury } from "@nevex/module-treasury";
 import { bootstrapVitality } from "@nevex/module-vitality";
+import { bootstrapPresence } from "@nevex/module-presence";
+import { bootstrapEnvironment } from "@nevex/module-environment";
+import { bootstrapTrajectory } from "@nevex/module-trajectory";
 import { startOutcomeStore } from "@nevex/notification-service";
 
 let bootstrapped = false;
@@ -10,9 +13,12 @@ let bootstrapped = false;
 async function ensureBootstrapped() {
   if (bootstrapped) return;
   await connectDb();
-  startOutcomeStore();  // must start before domain bootstraps so it catches all outcomes
+  startOutcomeStore();
   bootstrapTreasury();
   bootstrapVitality();
+  bootstrapPresence();
+  bootstrapEnvironment();
+  bootstrapTrajectory();
   bootstrapped = true;
 }
 

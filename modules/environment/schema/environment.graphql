@@ -1,0 +1,24 @@
+type EnvironmentAsset {
+  id: ID!
+  name: String!
+  category: AssetCategory!
+  status: AssetStatus!
+  note: String
+  purchasedAt: String
+  createdAt: String!
+  updatedAt: String!
+}
+
+enum AssetCategory { workspace hardware software furniture other }
+enum AssetStatus { owned planned sold }
+
+input AcquireAssetInput {
+  name: String!
+  category: AssetCategory!
+  status: AssetStatus!
+  note: String
+  purchasedAt: String
+}
+
+type EnvironmentQuery { assets: [EnvironmentAsset!]! }
+type EnvironmentMutation { acquireAsset(input: AcquireAssetInput!): EnvironmentAsset! }

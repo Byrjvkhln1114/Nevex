@@ -1,0 +1,41 @@
+type PresenceWardrobeItem {
+  id: ID!
+  name: String!
+  category: ClothingCategory!
+  brand: String
+  color: String
+  condition: WardrobeItemCondition!
+  createdAt: String!
+  updatedAt: String!
+}
+
+enum ClothingCategory {
+  tops
+  bottoms
+  outerwear
+  shoes
+  accessories
+}
+
+enum WardrobeItemCondition {
+  new
+  good
+  worn
+  retired
+}
+
+input AddWardrobeItemInput {
+  name: String!
+  category: ClothingCategory!
+  brand: String
+  color: String
+  condition: WardrobeItemCondition!
+}
+
+type PresenceQuery {
+  wardrobeItems: [PresenceWardrobeItem!]!
+}
+
+type PresenceMutation {
+  addWardrobeItem(input: AddWardrobeItemInput!): PresenceWardrobeItem!
+}

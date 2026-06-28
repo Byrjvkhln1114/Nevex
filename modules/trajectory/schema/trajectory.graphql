@@ -1,0 +1,43 @@
+type TrajectorySkill {
+  id: ID!
+  name: String!
+  category: String!
+  level: SkillLevel!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type TrajectoryCertification {
+  id: ID!
+  title: String!
+  issuer: String!
+  earnedAt: String!
+  expiresAt: String
+  createdAt: String!
+}
+
+type TrajectoryMilestone {
+  id: ID!
+  title: String!
+  description: String
+  occurredAt: String!
+  createdAt: String!
+}
+
+enum SkillLevel { beginner intermediate advanced expert }
+
+input AddSkillInput { name: String! category: String! level: SkillLevel! }
+input AddCertificationInput { title: String! issuer: String! earnedAt: String! expiresAt: String }
+input AddMilestoneInput { title: String! description: String occurredAt: String! }
+
+type TrajectoryQuery {
+  skills: [TrajectorySkill!]!
+  certifications: [TrajectoryCertification!]!
+  milestones: [TrajectoryMilestone!]!
+}
+
+type TrajectoryMutation {
+  addSkill(input: AddSkillInput!): TrajectorySkill!
+  addCertification(input: AddCertificationInput!): TrajectoryCertification!
+  addMilestone(input: AddMilestoneInput!): TrajectoryMilestone!
+}
