@@ -44,6 +44,25 @@ type TreasuryQuery {
   debts: [TreasuryDebt!]!
 }
 
+input CreateAccountInput {
+  name: String!
+  type: AccountType!
+  balanceAmount: Int!
+  currency: Currency!
+}
+
+input CreateDebtInput {
+  accountId: ID!
+  label: String!
+  principalAmount: Int!
+  currency: Currency!
+  interestRate: Float!
+  minimumPaymentAmount: Int!
+  payoffTarget: String
+}
+
 type TreasuryMutation {
+  createAccount(input: CreateAccountInput!): TreasuryAccount!
+  createDebt(input: CreateDebtInput!): TreasuryDebt!
   makeDebtPayment(debtId: ID!, amount: Int!, currency: Currency!): Boolean!
 }

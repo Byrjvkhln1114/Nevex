@@ -2,10 +2,19 @@ import {
   findHabitById,
   logHabitCompletion,
   updateHabitStreak,
+  createHabit,
 } from "../repository";
 import { emitHabitStreakAchieved } from "../events";
+import type { VitalityHabit } from "../types";
 
 const STREAK_MILESTONES = [7, 14, 30, 60, 90, 180, 365];
+
+export async function createVitalityHabit(input: {
+  name: string;
+  frequency: VitalityHabit["frequency"];
+}): Promise<VitalityHabit> {
+  return createHabit(input);
+}
 
 export async function completeHabit(
   habitId: string,
@@ -21,7 +30,6 @@ export async function completeHabit(
   await logHabitCompletion(habitId, note);
   await updateHabitStreak(habitId, newStreak, newLongest, now);
 
-  // Emit event at every milestone so rules can react
   if (STREAK_MILESTONES.includes(newStreak)) {
     emitHabitStreakAchieved({
       habitId,

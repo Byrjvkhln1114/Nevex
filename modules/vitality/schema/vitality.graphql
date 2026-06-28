@@ -29,6 +29,20 @@ type VitalityQuery {
   recentCheckIns: [VitalityWellbeingCheckIn!]!
 }
 
+input CreateHabitInput {
+  name: String!
+  frequency: HabitFrequency!
+}
+
+input CreateCheckInInput {
+  moodScore: Int!
+  energyScore: Int!
+  sleepHours: Float!
+  note: String
+}
+
 type VitalityMutation {
+  createHabit(input: CreateHabitInput!): VitalityHabit!
+  createCheckIn(input: CreateCheckInInput!): VitalityWellbeingCheckIn!
   completeHabit(habitId: ID!, note: String): Boolean!
 }
